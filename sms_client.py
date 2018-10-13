@@ -3,19 +3,25 @@ Written by Michelle Lim Shi Hui & Nicholas Phang
 Dean's Crisis Management System - Notification Subsystem
 For CZ3003 Software System Analysis & Design
 
-SMS API -
-Takes in List of SMS numbers & message, formats the message & posts it
+WhatsApp API -
+Takes in a message & sends as a WhatsApp message
 Leverages on Twilio package
 '''
 
-import twilio
+from twilio.rest import Client
+import oauth_creds
 
-def connect ():
-    # TODO: connect to twilio
+def main(data):
+    account_sid = oauth_creds.twilio_account_sid
+    auth_token = oauth_creds.twilio_accesstoken
+    client = Client(account_sid, auth_token)
+    print('Twilio Connection Successful')
+    post(client, data)
+    print('Whatsapp Message Sent')
 
-def format_message (message):
-    # TODO: format message here
-
-def post(smsList):
-    # TODO: break down list to get phone numbers to send to
-    # TODO: post message here
+def post(client, data):
+    message = client.messages.create(
+        to="whatsapp:+6586830963",
+        from_="whatsapp:+14155238886",
+        body=data)
+    print(message.sid)

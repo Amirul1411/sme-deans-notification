@@ -7,9 +7,7 @@ Message Manager -
 Main function that receives & processes the messages received from API subsystem, calls the relevant API endpoints
 '''
 
-# PSEUDOCODE FIRST, WILL DO THE ACTUAL CODING LATER.
-
-# imports the 4 subfiles
+#imports the 4 subfiles
 import email_client
 import facebook_client
 import sms_client
@@ -22,7 +20,7 @@ import twitter_client
 ############################W#################
 
 # listener, polls for events
-# on trigger, parse message
+# onEvent, add message to queue
 
 #############################################
 #             MESSAGE PARSING               #
@@ -34,27 +32,33 @@ import twitter_client
 # 3) need some system such that we know what kind of message it is
 #       1) crisis signal 2) summary report 3) social message
 
+#sample message:
+message = 'r, fire at 639798, 865' #message type, message data, message number/credentials
+messageList = [x.strip() for x in message.split(',')]
+type = messageList[0]
+data = messageList[1]
+dest = messageList[2]
+
+emailList = ['michellelimsh@gmail.com']
 #############################################
 #            MESSAGE REDIRECTING            #
 #############################################
 
-# if type = crisis signal:
-#   sms_api.connect(twilio_credentials)
-#   sms_api.format(message)
-#   sms_api.post(sms_list)
+#message type = c for crisis, r for report, s for social media
 
-# if type = summary_report:
-#   email_api.connect(email_credientials)
-#   email_api.format(message)
-#   email_api.post(email_add_list)
+if type == 'c':
+    print('Connecting to Twilio...')
+    sms_client.main(data)
 
-# if type = social_message:
-#   facebook_api.connect(facebook_credientials)
-#   facebook_api.format(message)
-#   facebook_api.post()
-#   twitter_api.connect(ckey, csecret, akey, asecret)
-#   twitter_api.format(message)
-#   twitter_api.post()
+if type == 'r':
+    print('Connecting to Gmail...')
+    email_client.main(data, emailList)
+
+if type == 's':
+    print('Connecting to Twitter...')
+    twitter_client.main(data)
+    print('Connecting to Facebook...')
+    facebook_client.main(data)
 
 
 

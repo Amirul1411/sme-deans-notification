@@ -9,12 +9,26 @@ Leverages on Facebook's Graph API
 '''
 
 import facebook
+import oauth_creds
 
-def connect (facebook_OAuth):
-    # TODO: facebook auth
+def main(data):
+    cfg = {
+        "page_id": 2189340524616954,
+        "access_token": oauth_creds.fb_accesstoken
+    }
 
-def format_message (message):
-    # TODO: format message here
+    api = get_api(cfg)
+    print('Facebook Connection Successful')
+    status = api.put_wall_post(data)
 
-def post():
-    # TODO: post message here
+def get_api(cfg):
+    graph = facebook.GraphAPI(cfg['access_token'])
+    # Get page token to post as the page. You can skip
+    # the following if you want to post as yourself.
+    resp = graph.get_object('me/accounts')
+    page_access_token = None
+    for page in resp['data']:
+        if page['id'] == cfg['page_id']:
+            page_access_token = page['access_token']
+            graph = facebook.GraphAPI(page_access_token)
+            return graph

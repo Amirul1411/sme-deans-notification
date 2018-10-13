@@ -9,19 +9,17 @@ Leverages on Tweepy package to connect to Twitter API endpoint
 '''
 
 import tweepy
+import oauth_creds
 
-def connect (ckey,csecret,akey,asecret):
-    consumer_key = ckey
-    consumer_secret = csecret
-    access_key = akey
-    access_secret = asecret
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_key, access_secret)
+def main(data):
+    auth = tweepy.OAuthHandler(oauth_creds.ckey, oauth_creds.csecret)
+    auth.set_access_token(oauth_creds.atoken, oauth_creds.asecret)
+    print('Twitter Authentication Complete')
     api = tweepy.API(auth)
-    api.update_status('Twitter Authentication Complete')
+    post(api, data)
 
-def format_message (message):
-    # TODO: format message here
+def post(api, data):
+    api.update_status(data)
+    print(data)
+    print("Twitter Post Successful")
 
-def post():
-    # TODO: post message here
