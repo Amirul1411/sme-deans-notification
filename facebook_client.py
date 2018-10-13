@@ -9,12 +9,17 @@ Leverages on Facebook's Graph API
 '''
 
 import facebook
-import oauth_creds
+
+#Get API keys
+from configparser import ConfigParser
+config = ConfigParser()
+config.read('config.ini')
+token = config.get('facebook', 'token')
 
 def main(data):
     cfg = {
         "page_id": 2189340524616954,
-        "access_token": oauth_creds.fb_accesstoken
+        "access_token": token
     }
 
     api = get_api(cfg)

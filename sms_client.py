@@ -9,12 +9,16 @@ Leverages on Twilio package
 '''
 
 from twilio.rest import Client
-import oauth_creds
+
+#Get API keys
+from configparser import ConfigParser
+config = ConfigParser()
+config.read('config.ini')
+account_sid = config.get('twilio', 'account_sid')
+token = config.get('twilio', 'token')
 
 def main(data):
-    account_sid = oauth_creds.twilio_account_sid
-    auth_token = oauth_creds.twilio_accesstoken
-    client = Client(account_sid, auth_token)
+    client = Client(account_sid, token)
     print('Twilio Connection Successful')
     post(client, data)
     print('Whatsapp Message Sent')

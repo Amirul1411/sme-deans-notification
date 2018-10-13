@@ -9,10 +9,17 @@ Leverages on smtplib
 '''
 
 import smtplib
-import oauth_creds
+
+#Get API keys
+from configparser import ConfigParser
+config = ConfigParser()
+config.read('config.ini')
+user = config.get('gmail', 'user')
+password = config.get('gmail', 'password')
+
 
 def main(data, emailList):
-    sent_from = oauth_creds.gmail_user
+    sent_from = user
     to = emailList #['email','email']
     subject = "Crisis Management Summary Report"
     body = data
@@ -27,7 +34,7 @@ def main(data, emailList):
     try:
         server_ssl = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server_ssl.ehlo()
-        server_ssl.login(oauth_creds.gmail_user, oauth_creds.gmail_password)
+        server_ssl.login(user, password)
         print('Connection to Gmail Success!')
         server_ssl.sendmail(sent_from, to, email_text)
         server_ssl.close()
