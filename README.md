@@ -12,3 +12,7 @@ Windows:
 pip install required_packages.txt
 ```
 
+## Links:
+
+Facebook Page: https://www.facebook.com/deans.cms/
+Twitter Account: https://twitter.com/michlimx
