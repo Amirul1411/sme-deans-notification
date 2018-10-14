@@ -9,7 +9,7 @@ This app uses a number of packages that will need to be installed via pip.
 Windows:
 
 ```sh
-pip install required_packages.txt
+pip install-r requirements.txt
 ```
 
 ## Links:
