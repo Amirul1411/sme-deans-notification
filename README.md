@@ -49,6 +49,8 @@ TO BE UPDATED
 
 ## Links:
 
+Email account: deanscms@gmail.com
+
 Facebook Page: https://www.facebook.com/deans.cms/ 
 
 Twitter Account: https://twitter.com/dean_cms
