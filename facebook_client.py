@@ -14,26 +14,19 @@ import facebook
 from configparser import ConfigParser
 config = ConfigParser()
 config.read('config.ini')
-token = config.get('facebook', 'token')
+page_id = config.get('facebook', 'page_id')
+
+token = config.get('facebook', 'user_token')
 
 def main(data):
-    cfg = {
-        "page_id": 2189340524616954,
-        "access_token": token
-    }
+    graph = facebook.GraphAPI(access_token = token)
+    print("Connection to Facebook success")
+    formatted_text = format(data)
+    graph.put_object(parent_object='me',
+                     connection_name='feed',
+                     message=formatted_text)
+    print("Post to Facebook success")
 
-    api = get_api(cfg)
-    print('Facebook Connection Successful')
-    status = api.put_wall_post(data)
-
-def get_api(cfg):
-    graph = facebook.GraphAPI(cfg['access_token'])
-    # Get page token to post as the page. You can skip
-    # the following if you want to post as yourself.
-    resp = graph.get_object('me/accounts')
-    page_access_token = None
-    for page in resp['data']:
-        if page['id'] == cfg['page_id']:
-            page_access_token = page['access_token']
-            graph = facebook.GraphAPI(page_access_token)
-            return graph
+def format(data):
+    formatted_text = data
+    return formatted_text

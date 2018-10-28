@@ -2,3 +2,4 @@ facebook-sdk
 twilio
 tweepy
 configparser
+pyreportjasper

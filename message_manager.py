@@ -4,62 +4,54 @@ Dean's Crisis Management System - Notification Subsystem
 For CZ3003 Software System Analysis & Design
 
 Message Manager -
-Main function that receives & processes the messages received from API subsystem, calls the relevant API endpoints
+API Server that receives JSON requests through API endpoints & processes them
 '''
 
-#imports the 4 subfiles
-import email_client
+from flask import Flask, jsonify, request
+from datetime import datetime
+import reportgeneration
 import facebook_client
 import sms_client
 import twitter_client
+import email_client
 
-# if __name__ == "__main__":
+app = Flask(__name__)
 
-#############################################
-#       CONNECTION TO API SUBSYSTEM         #
-############################W#################
+@app.route("/")
+def hello():
+    return "Hello World!"
 
-# listener, polls for events
-# onEvent, add message to queue
-
-#############################################
-#             MESSAGE PARSING               #
-#############################################
-
-# Questions:
-# 1) what is the message format that will be delivered to us?
-# 2) what will be contained in the message?
-# 3) need some system such that we know what kind of message it is
-#       1) crisis signal 2) summary report 3) social message
-
-#sample message:
-message = 'r, fire at 639798, 865' #message type, message data, message number/credentials
-messageList = [x.strip() for x in message.split(',')]
-type = messageList[0]
-data = messageList[1]
-dest = messageList[2]
-
-emailList = ['michellelimsh@gmail.com']
-#############################################
-#            MESSAGE REDIRECTING            #
-#############################################
-
-#message type = c for crisis, r for report, s for social media
-
-if type == 'c':
-    print('Connecting to Twilio...')
-    sms_client.main(data)
-
-if type == 'r':
-    print('Connecting to Gmail...')
-    email_client.main(data, emailList)
-
-if type == 's':
+# JSON format: {'message' : string}
+@app.route('/socialmessages/', methods=['POST'])
+def post_social_message():
+    data = request.get_json()
+    message = data['message']
     print('Connecting to Twitter...')
-    twitter_client.main(data)
+    twitter_client.main(message)
     print('Connecting to Facebook...')
-    facebook_client.main(data)
+    facebook_client.main(message)
+    return jsonify({'result' : 'Success!', 'posted' : message})
 
+# JSON format: {'number' : string, 'message' : string}
+@app.route('/dispatchnotices/', methods=['POST'])
+def post_dispatch_notice():
+    data = request.get_json()
+    number = data['number']
+    message = data['message']
+    print('Connecting to Twilio...')
+    sms_client.main(number, message)
+'''
 
+# JSON format: {'email' : email address,
+@app.route('/reports/', methods=['POST'])
+def generate_report():
+    data = request.get_json()
+    emailadd = data['email']
+    subject = "Crisis Summary Report for" + #auto-generate
+    report = report_generation.main(data)
+    print('Connecting to Gmail...')
+    email_client.main(emailadd, subject, report)
+'''
 
-
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port=8000, debug=True)

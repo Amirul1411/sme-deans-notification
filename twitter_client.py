@@ -19,6 +19,8 @@ csecret = config.get('twitter', 'csecret')
 atoken = config.get('twitter', 'atoken')
 asecret = config.get('twitter', 'asecret')
 
+## TODO: IMPLEMENT ERROR HANDLING IF EXCESS 140 CHAR
+
 def main(data):
     auth = tweepy.OAuthHandler(ckey, csecret)
     auth.set_access_token(atoken, asecret)
