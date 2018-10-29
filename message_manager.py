@@ -6,8 +6,7 @@ For CZ3003 Software System Analysis & Design
 Message Manager -
 API Server that receives JSON requests through API endpoints & processes them
 '''
-
-from flask import Flask, jsonify, request, Response
+from flask import Flask, request, Response
 from datetime import datetime
 #import report_generation
 import facebook_client
