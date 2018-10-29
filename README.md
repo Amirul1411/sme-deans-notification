@@ -35,16 +35,12 @@ Postman-Token: 2f604143-450a-45e9-bf85-a5442d3173b0
 ```
 
 2. Sending dispatch announcement through WhatsApp
-```sh
-POST /dispatchnotices/ HTTP/1.1
-Host: 127.0.0.1
-Content-Type: application/json
-cache-control: no-cache
-Postman-Token: 2f604143-450a-45e9-bf85-a5442d3173b0
-{"number" : "+6586830963", "message" : "FIRE @ 23 Nanyang Crescent"}
-```
+
+TO BE UPDATED
+
 
 3. Generating a Jasper Report & Sending through Email
+
 TO BE UPDATED
 
 ## Links:
