@@ -11,7 +11,7 @@ from flask import Flask, jsonify, request
 from datetime import datetime
 #import report_generation
 import facebook_client
-#import sms_client
+import sms_client
 import twitter_client
 #import email_client
 
@@ -27,7 +27,7 @@ def post_social_message():
     print('Connecting to Facebook...')
     facebook_client.main(message)
     return jsonify({'result' : 'Success!', 'posted' : message})
-'''
+
 # JSON format: {"number" : string, "message" : string}
 @app.route('/dispatchnotices/', methods=['POST'])
 def post_dispatch_notice():
@@ -36,7 +36,7 @@ def post_dispatch_notice():
     message = data['message']
     print('Connecting to Twilio...')
     sms_client.main(number, message)
-
+'''
 # JSON format: {"email" : email address, 'cases' : [ {'time' : time, 'location' : location, 'type' : type, 'status' : string, 'resolved_in' : double},...]
 @app.route('/reports/', methods=['POST'])
 def generate_report():

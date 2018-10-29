@@ -17,15 +17,15 @@ config.read('config.ini')
 account_sid = config.get('twilio', 'account_sid')
 token = config.get('twilio', 'token')
 
-def main(data):
+def main(number, message):
     client = Client(account_sid, token)
     print('Twilio Connection Successful')
-    post(client, data)
+    post(client, number, message)
     print('Whatsapp Message Sent')
 
-def post(client, data):
+def post(client, number, message):
     message = client.messages.create(
-        to="whatsapp:+6586830963",
+        to="whatsapp:"+number,
         from_="whatsapp:+14155238886",
-        body=data)
+        body=message)
     print(message.sid)
