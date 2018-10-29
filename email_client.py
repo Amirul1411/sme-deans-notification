@@ -9,6 +9,11 @@ Leverages on smtplib
 '''
 
 import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+from datetime import datetime
 
 #Get API keys
 from configparser import ConfigParser
@@ -18,28 +23,43 @@ user = config.get('gmail', 'user')
 password = config.get('gmail', 'password')
 
 def main(emailadd, subject, report):
-    sent_from = user
-    to = emailadd
-    subject = subject
-    email_text = """ 
+    msg = MIMEMultipart()
+    msg['From'] = user
+    msg['To'] = emailadd
+    msg['Subject'] = subject
+    body = """ 
     Dear President,
     
-    This is the report for ## date ##time. 
+    This is the report for %s. 
     
     Best Regards,
     Dean's Crisis Management Service
     
     This is an auto-generated message. Please do not reply.
-    """ % (sent_from, ", ".join(to), subject, body)
+    """ % (datetime.now().strftime("%I:%M%p on %B %d, %Y"))
+    msg.attach(MIMEText(body, 'plain'))
+
+    filename = report
+    attachment = open(filename, 'rb')
+
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload(attachment.read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= "+filename)
+
+    msg.attach(part)
+
+    text = msg.as_string()
 
     try:
-        server_ssl = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server_ssl.ehlo()
-        server_ssl.login(user, password)
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(user, password)
         print('Connection to Gmail Success!')
-        server_ssl.sendmail(sent_from, to, email_text)
-        server_ssl.close()
+        server.sendmail(user, emailadd, text)
+        server.quit()
         print('Email sent!')
     except:
+        #TODO: Exception Handling
         print('Something went wrong...')
 

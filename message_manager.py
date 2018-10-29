@@ -13,7 +13,7 @@ import facebook_client
 import sms_client
 import twitter_client
 import json
-#import email_client
+import email_client
 
 app = Flask(__name__)
 
@@ -44,17 +44,16 @@ def post_dispatch_notice():
     json_response = {'result': 'Success!', 'sent_to': number, 'posted': message}
     return Response(json.dumps(json_response), status=201, mimetype='application/json')
 
-'''
 # JSON format: {"email" : email address, 'cases' : [ {'time' : time, 'location' : location, 'type' : type, 'status' : string, 'resolved_in' : double},...]
 @app.route('/reports/', methods=['POST'])
 def generate_report():
     data = request.get_json()
     emailadd = data['email']
-    subject = "Crisis Summary Report for" + #auto-generate
-    report = report_generation.main(data)
+    subject = "Crisis Summary Report for " + datetime.now().strftime("%I:%M%p on %B %d, %Y")
     print('Connecting to Gmail...')
-    email_client.main(emailadd, subject, report)
-'''
+    email_client.main(emailadd, subject)
+    json_response = {'result': 'Success!', 'sent_to': emailadd}
+    return Response(json.dumps(json_response), status=201, mimetype='application/json')
 
 if __name__ == '__main__':
     app.run(host='localhost', port=8000, debug=True)
