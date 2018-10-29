@@ -2,17 +2,55 @@
 > This subsystem takes a message from the API subsystem, parses it, and redirects it to the relevant destination: Email, WhatsApp, or Facebook & Twitter. 
 
 
-## Installation
-
-This app uses a number of packages that will need to be installed via pip.
+## How to Start
 
 Windows:
 
+1. Clone the repository
+```sh
+git clone git://github.com/Deans-CMS/deans-notification.git
+```
+
+2. Install dependencies
 ```sh
 pip install-r requirements.txt
 ```
 
+3. Start server
+```sh
+python message_manager.py
+```
+The API server will start on 127.0.0.1:8000
+
+## API Endpoints
+
+1. Sending message to Facebook & Twitter
+```sh
+POST /socialmessages/ HTTP/1.1
+Host: 127.0.0.1
+Content-Type: application/json
+cache-control: no-cache
+Postman-Token: 2f604143-450a-45e9-bf85-a5442d3173b0
+{"message" : "hello world!"}
+```
+
+2. Sending dispatch announcement through WhatsApp
+```sh
+POST /dispatchnotices/ HTTP/1.1
+Host: 127.0.0.1
+Content-Type: application/json
+cache-control: no-cache
+Postman-Token: 2f604143-450a-45e9-bf85-a5442d3173b0
+{"number" : "+6586830963", "message" : "FIRE @ 23 Nanyang Crescent"}
+```
+
+3. Generating a Jasper Report & Sending through Email
+TO BE UPDATED
+
 ## Links:
 
-Facebook Page: https://www.facebook.com/deans.cms/
-Twitter Account: https://twitter.com/michlimx
+Email account: deanscms@gmail.com
+
+Facebook Page: https://www.facebook.com/deans.cms/ 
+
+Twitter Account: https://twitter.com/dean_cms
