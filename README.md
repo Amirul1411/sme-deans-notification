@@ -31,7 +31,7 @@ As WhatsApp for Twilio is still in Sandbox mode, please connect your WhatsApp nu
 1. Facebook & Twitter ```/socialmessages/```
 ```sh
 POST /socialmessages/ HTTP/1.1
-Host: 127.0.0.1
+Host: localhost
 Content-Type: application/json
 cache-control: no-cache
 Postman-Token: 2f604143-450a-45e9-bf85-a5442d3173b0
@@ -41,7 +41,7 @@ Postman-Token: 2f604143-450a-45e9-bf85-a5442d3173b0
 2. WhatsApp ```/dispatchnotices/```
 ```sh
 POST /dispatchnotices/ HTTP/1.1
-Host: 127.0.0.1
+Host: localhost
 Content-Type: application/json
 cache-control: no-cache
 Postman-Token: fde35f4e-0cd6-4178-8b13-65c274d0bb9b
