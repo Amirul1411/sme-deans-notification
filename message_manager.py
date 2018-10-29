@@ -21,7 +21,7 @@ app = Flask(__name__)
 def hello():
     return "Hello World!"
 
-# JSON format: {'message' : string}
+# JSON format: {"message" : string}
 @app.route('/socialmessages/', methods=['POST'])
 def post_social_message():
     data = request.get_json()
@@ -32,7 +32,7 @@ def post_social_message():
     facebook_client.main(message)
     return jsonify({'result' : 'Success!', 'posted' : message})
 
-# JSON format: {'number' : string, 'message' : string}
+# JSON format: {"number" : string, "message" : string}
 @app.route('/dispatchnotices/', methods=['POST'])
 def post_dispatch_notice():
     data = request.get_json()
@@ -42,7 +42,7 @@ def post_dispatch_notice():
     sms_client.main(number, message)
 '''
 
-# JSON format: {'email' : email address,
+# JSON format: {"email" : email address,
 @app.route('/reports/', methods=['POST'])
 def generate_report():
     data = request.get_json()
