@@ -17,18 +17,19 @@ config.read('config.ini')
 user = config.get('gmail', 'user')
 password = config.get('gmail', 'password')
 
-
-def main(data, emailList):
+def main(emailadd, subject, report):
     sent_from = user
-    to = emailList #['email','email']
-    subject = "Crisis Management Summary Report"
-    body = data
+    to = emailadd
+    subject = subject
     email_text = """ 
-    From: %s  
-    To: %s  
-    Subject: %s
-
-    %s
+    Dear President,
+    
+    This is the report for ## date ##time. 
+    
+    Best Regards,
+    Dean's Crisis Management Service
+    
+    This is an auto-generated message. Please do not reply.
     """ % (sent_from, ", ".join(to), subject, body)
 
     try:
