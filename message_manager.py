@@ -9,7 +9,7 @@ API Server that receives JSON requests through API endpoints & processes them
 
 from flask import Flask, jsonify, request
 from datetime import datetime
-import reportgeneration
+# import reportgeneration
 import facebook_client
 import sms_client
 import twitter_client
@@ -54,4 +54,4 @@ def generate_report():
 '''
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)
