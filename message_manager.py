@@ -44,16 +44,22 @@ def post_dispatch_notice():
     json_response = {'result': 'Success!', 'sent_to': number, 'posted': message}
     return Response(json.dumps(json_response), status=201, mimetype='application/json')
 
-# JSON format: {"email" : email address, 'cases' : [ {'time' : time, 'location' : location, 'type' : type, 'status' : string, 'resolved_in' : double},...]
+# JSON format: {"email" : email address, "cases" : [ {"time" : time, "location" : location, "type" : type, "status" : string, "resolved_in" : double},...]
 @app.route('/reports/', methods=['POST'])
 def generate_report():
     data = request.get_json()
     emailadd = data['email']
     subject = "Crisis Summary Report for " + datetime.now().strftime("%I:%M%p on %B %d, %Y")
     print('Connecting to Gmail...')
-    email_client.main(emailadd, subject)
+    report = "reports/001_report.txt"
+    email_client.main(emailadd, subject, report)
     json_response = {'result': 'Success!', 'sent_to': emailadd}
     return Response(json.dumps(json_response), status=201, mimetype='application/json')
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=8000, debug=True)
+    import os
+    if('IN_DOCKER' in os.environ and os.environ['IN_DOCKER']=='1'):
+        DEBUG = not ('PRODUCTION' in os.environ and os.environ['PRODUCTION']=='1')
+        app.run(host='0.0.0.0', port=8000, debug=DEBUG)
+    else:
+         app.run(host='127.0.0.1', port=8000, debug=True)
