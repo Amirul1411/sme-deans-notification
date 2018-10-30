@@ -31,7 +31,7 @@ def post_social_message():
     twitter_client.main(message)
     print('Connecting to Facebook...')
     facebook_client.main(message)
-    json_response = {'result' : 'Success!', 'posted' : message}
+    json_response = {"result" : "Success!", "posted" : message}
     return Response(json.dumps(json_response), status=201, mimetype='application/json')
 
 # JSON format: {"number" : string, "message" : string}
@@ -42,7 +42,7 @@ def post_dispatch_notice():
     message = data['message']
     print('Connecting to Twilio...')
     sms_client.main(number, message)
-    json_response = {'result': 'Success!', 'sent_to': number, 'posted': message}
+    json_response = {"result": "Success!", "sent_to": number, "posted": message}
     return Response(json.dumps(json_response), status=201, mimetype='application/json')
 
 '''
@@ -74,7 +74,7 @@ def generate_report():
     emailadd = data['email']
     subject = "Crisis Summary Report for " + datetime.now().strftime("%I:%M%p on %B %d, %Y")
     email_client.main(emailadd, subject, report)
-    json_response = {'result': 'Success!', 'sent_to': emailadd}
+    json_response = {"result": "Success!", "sent_to": emailadd}
     return Response(json.dumps(json_response), status=201, mimetype='application/json')
 
 if __name__ == '__main__':
