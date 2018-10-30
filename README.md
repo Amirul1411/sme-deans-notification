@@ -29,6 +29,10 @@ As WhatsApp for Twilio is still in Sandbox mode, please connect your WhatsApp nu
 ## API Endpoints
 
 1. Facebook & Twitter ```/socialmessages/```
+
+Takes a JSON file of format ```{"message" : string}``` and posts the message to Dean CMS' Facebook & Twitter pages, returning a HTTP Response of status code ```201``` if successfully posted.
+
+>Example:
 ```sh
 POST /socialmessages/ HTTP/1.1
 Host: localhost
@@ -39,6 +43,12 @@ Postman-Token: 2f604143-450a-45e9-bf85-a5442d3173b0
 ```
 
 2. WhatsApp ```/dispatchnotices/```
+
+Takes a JSON file of format ```{"number" : phone number (with country code), "message" : string}``` and sends a WhatsApp message to the specified number pages, returning a HTTP Response of status code ```201``` if successfully sent.
+
+**NOTE: The number MUST be connected to Twilio's Sandbox in order to successfully receive messages, otherwise it will fail.**
+
+>Example:
 ```sh
 POST /dispatchnotices/ HTTP/1.1
 Host: localhost
@@ -50,7 +60,40 @@ Postman-Token: fde35f4e-0cd6-4178-8b13-65c274d0bb9b
 
 3. Email Reports ```/reports/```
 
-TO BE UPDATED
+Accepts a JSON file of ```{"email" : email address, "cases" : list of json records}```, uses Jasper Reports to generate a pdf version of the JSON data received, and emails it as an attachment to the specified email address. 
+
+HTTP Response of status code ```201``` returned if successfully sent.
+
+>Example:
+```sh
+POST /reports/ HTTP/1.1
+Host: localhost
+Content-Type: application/json
+cache-control: no-cache
+Postman-Token: eb29d4bb-3500-4155-b17b-e478f203dab4
+{
+  "email":"michellelimsh@gmail.com",
+  "cases":[
+    {"crisis_time" : "16:15:30",
+      "resolved_by" : "18:32:15",
+      "crisis_type": "Fire Breakout",
+      "crisis_description": "Fire!!!",
+      "crisis_assistance": "Fire Fighting",
+      "crisis_location": "24 Nanyang Crescent Block 24 #06-23"
+},
+    {"crisis_time" : "17:53:25",
+      "resolved_by" : "18:37:23",
+      "crisis_type": "Casualty",
+      "crisis_description": "Heart Attack",
+      "crisis_assistance": "Emergency Ambulance",
+      "crisis_location": "112 Boon Lay Avenue 6 Block 112 #06-23"
+},
+{
+  ...
+}, ...
+]
+}
+```
 
 ## Accounts:
 
