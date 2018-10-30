@@ -8,7 +8,7 @@ API Server that receives JSON requests through API endpoints & processes them
 '''
 from flask import Flask, request, Response
 from datetime import datetime
-#import report_generation
+import report_generation
 import facebook_client
 import sms_client
 import twitter_client
@@ -16,6 +16,7 @@ import json
 import email_client
 
 app = Flask(__name__)
+report_count = 1
 
 @app.route('/')
 def hello_world():
@@ -44,14 +45,34 @@ def post_dispatch_notice():
     json_response = {'result': 'Success!', 'sent_to': number, 'posted': message}
     return Response(json.dumps(json_response), status=201, mimetype='application/json')
 
-# JSON format: {"email" : email address, "cases" : [ {"time" : time, "location" : location, "type" : type, "status" : string, "resolved_in" : double},...]
+'''
+JSON format:
+{"email" : email address, 
+"cases" : 
+[ {
+        "crisis_time" : datetime, 
+        "resolved_by" : datetime,
+        "location" : location,
+        "crisis_type" : string,
+        "crisis_description" : string,
+        "crisis_assistance": string
+},
+]}
+'''
 @app.route('/reports/', methods=['POST'])
 def generate_report():
+    global report_count
     data = request.get_json()
+    with open('json_summary/json'+str(report_count)+'.json', 'w+') as f:
+        json.dump(data, f)
+    report_generation.json_to_pdf(report_count)
+    print('Generating Report...')
+    report = "reports/report"+str(report_count)+'.pdf'
+    report_count += 1
+
+    print('Connecting to Gmail...')
     emailadd = data['email']
     subject = "Crisis Summary Report for " + datetime.now().strftime("%I:%M%p on %B %d, %Y")
-    print('Connecting to Gmail...')
-    report = "reports/001_report.txt"
     email_client.main(emailadd, subject, report)
     json_response = {'result': 'Success!', 'sent_to': emailadd}
     return Response(json.dumps(json_response), status=201, mimetype='application/json')

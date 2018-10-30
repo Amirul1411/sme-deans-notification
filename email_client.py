@@ -45,7 +45,7 @@ def main(emailadd, subject, report):
     part = MIMEBase('application', 'octet-stream')
     part.set_payload(attachment.read())
     encoders.encode_base64(part)
-    part.add_header('Content-Disposition', "attachment; filename= "+filename)
+    part.add_header('Content-Disposition', "attachment; filename= "+filename[filename.index("/")+1:])
 
     msg.attach(part)
 
