@@ -61,19 +61,22 @@ JSON format:
 '''
 @app.route('/reports/', methods=['POST'])
 def generate_report():
-    global report_count
+    # global report_count
     data = request.get_json()
-    with open('json_summary/json'+str(report_count)+'.json', 'w+') as f:
+    time_stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    json_file = "json_summary/report_" + time_stamp + ".json"
+    with open(json_file, 'w+') as f:
         json.dump(data, f)
-    report_generation.json_to_pdf(report_count)
+    # report_generation.json_to_pdf(report_count)
     print('Generating Report...')
-    report = "reports/report"+str(report_count)+'.pdf'
-    report_count += 1
+    # report = "reports/report"+str(report_count)+'.pdf'
+    # report_count += 1
 
     print('Connecting to Gmail...')
     emailadd = data['email']
     subject = "Crisis Summary Report for " + datetime.now().strftime("%I:%M%p on %B %d, %Y")
-    email_client.main(emailadd, subject, report)
+    # email_client.main(emailadd, subject, report)
+    email_client.main(emailadd, subject, json_file)
     json_response = {"result": "Success!", "sent_to": emailadd}
     return Response(json.dumps(json_response), status=201, mimetype='application/json')
 
