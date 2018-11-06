@@ -32,6 +32,8 @@ As WhatsApp for Twilio is still in Sandbox mode, please connect your WhatsApp nu
 
 Takes a JSON file of format ```{"message" : string}``` and posts the message to Dean CMS' Facebook & Twitter pages, returning a HTTP Response of status code ```201``` if successfully posted.
 
+**NOTE: Facebook App is still in development mode, only developers can see the posts posted. Still in process of App Review.**
+
 >Example:
 ```sh
 POST /socialmessages/ HTTP/1.1
