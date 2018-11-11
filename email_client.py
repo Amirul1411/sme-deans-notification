@@ -15,6 +15,8 @@ from email.mime.base import MIMEBase
 from email import encoders
 from datetime import datetime
 
+import pprint
+
 #Get API keys
 from configparser import ConfigParser
 config = ConfigParser()
@@ -22,32 +24,75 @@ config.read('config.ini')
 user = config.get('gmail', 'user')
 password = config.get('gmail', 'password')
 
-def main(emailadd, subject, report):
+def prettyPrintReport(data):
+    message = ""
+    message += "-------------------------------------------------------------------------------------------\n"
+    message += "                          New Crises Reported in Past 30 Minutes     \n"
+    message += "-------------------------------------------------------------------------------------------\n\n"
+
+    for crisis in data['new_crisis']:
+        message += "Report Time: " + crisis['crisis_time'] + "\n"
+        message += "Location: " + crisis['location'] + "\n"
+        message += "Location2: " + crisis['location2'] + "\n"
+        message += "Crisis Type: " + crisis['type'] + "\n"
+        message += "Assistance Requested: " + crisis['crisis_assistance'] + "\n"
+        message += "Description: " + crisis['crisis_description'] + "\n"
+        message += "\n"
+    message += "-------------------------------------------------------------------------------------------\n"
+    message += "                          Crises Resolved in Past 30 Minutes       \n"
+    message += "-------------------------------------------------------------------------------------------\n\n"
+    for crisis in data['recent_resolved_crisis']:
+        message += "Report Time: " + crisis['crisis_time'] + "\n"
+        message += "Location: " + crisis['location'] + "\n"
+        message += "Location2: " + crisis['location2'] + "\n"
+        message += "Crisis Type: " + crisis['type'] + "\n"
+        message += "Assistance Requested: " + crisis['crisis_assistance'] + "\n"
+        message += "Description: " + crisis['crisis_description'] + "\n"
+        message += "\n"
+
+    message += "-------------------------------------------------------------------------------------------\n"
+    message += "                          Current Unresolved Crisis           \n"
+    message += "-------------------------------------------------------------------------------------------\n\n"
+    for crisis in data['active_crisis']:
+        message += "Report Time: " + crisis['crisis_time'] + "\n"
+        message += "Location: " + crisis['location'] + "\n"
+        message += "Location2: " + crisis['location2'] + "\n"
+        message += "Crisis Type: " + crisis['type'] + "\n"
+        message += "Assistance Requested: " + crisis['crisis_assistance'] + "\n"
+        message += "Description: " + crisis['crisis_description'] + "\n"
+        message += "\n"
+
+    return message
+
+
+def main(emailadd, subject, data):
     msg = MIMEMultipart()
     msg['From'] = user
     msg['To'] = emailadd
     msg['Subject'] = subject
     body = """ 
-    Dear President,
+Dear Prime Minister,
     
-    This is the report for %s. 
+Here is the report as of %s. 
+
+%s
     
-    Best Regards,
-    Dean's Crisis Management Service
+Best regards,
+Dean's Crisis Management System
     
-    This is an auto-generated message. Please do not reply.
-    """ % (datetime.now().strftime("%I:%M%p on %B %d, %Y"))
+This is an auto-generated message. Please do not reply.
+    """ % (datetime.now().strftime("%I:%M %p on %B %d, %Y"), prettyPrintReport(data))
     msg.attach(MIMEText(body, 'plain'))
 
-    filename = report
-    attachment = open(filename, 'rb')
+    # filename = report
+    # attachment = open(filename, 'rb')
 
-    part = MIMEBase('application', 'octet-stream')
-    part.set_payload(attachment.read())
-    encoders.encode_base64(part)
-    part.add_header('Content-Disposition', "attachment; filename= "+filename[filename.index("/")+1:])
+    # part = MIMEBase('application', 'octet-stream')
+    # part.set_payload(attachment.read())
+    # encoders.encode_base64(part)
+    # part.add_header('Content-Disposition', "attachment; filename= "+filename[filename.index("/")+1:])
 
-    msg.attach(part)
+    # msg.attach(part)
 
     text = msg.as_string()
 
