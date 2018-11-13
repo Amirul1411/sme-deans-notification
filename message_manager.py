@@ -13,6 +13,7 @@ import facebook_client
 import sms_client
 import twitter_client
 import json
+import traceback
 import email_client
 
 app = Flask(__name__)
@@ -22,17 +23,38 @@ report_count = 1
 def hello_world():
     return "hello world!"
 
+'''
+JSON format:
+{"message":{
+    "twitterShare": String,
+    "facebookShare":{
+        "shelterURL" : String, 
+        "deansURL": String,
+        "recent_resolved_crisis":[],
+        "new_crisis":[],
+        "active_crisis":[]
+    }
+}
+}
+'''
+
 # JSON format: {"message" : string}
 @app.route('/socialmessages/', methods=['POST'])
 def post_social_message():
-    data = request.get_json()
-    message = data['message']
-    print('Connecting to Twitter...')
-    twitter_client.main(message)
-    print('Connecting to Facebook...')
-    facebook_client.main(message)
-    json_response = {"result" : "Success!", "posted" : message}
-    return Response(json.dumps(json_response), status=201, mimetype='application/json')
+    try :
+        data = request.get_json()
+        print(data)
+        message = data['message']
+        print('Connecting to Twitter...')
+        twitter_client.main(message['twitterShare'])
+        print('Connecting to Facebook...')
+        facebook_client.main(message['twitterShare'])
+        json_response = {"result" : "Success!", "posted" : message}
+
+        return Response(json.dumps(json_response), status=201, mimetype='application/json')
+
+    except Exception as e:
+        traceback.print_tb(e.__traceback__)
 
 # JSON format: {"number" : string, "message" : string}
 @app.route('/dispatchnotices/', methods=['POST'])
@@ -49,7 +71,7 @@ def post_dispatch_notice():
 JSON format:
 {"email" : email address, 
 "cases" : 
-[ {
+[{
         "crisis_time" : datetime, 
         "resolved_by" : datetime,
         "location" : location,

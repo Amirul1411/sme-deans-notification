@@ -19,9 +19,11 @@ page_id = config.get('facebook', 'page_id')
 token = config.get('facebook', 'user_token')
 
 def main(data):
+
     graph = facebook.GraphAPI(access_token = token)
     print("Connection to Facebook success")
     formatted_text = format(data)
+    print("Facebook Received: " + formatted_text)
     graph.put_object(parent_object='me',
                      connection_name='feed',
                      message=formatted_text)
