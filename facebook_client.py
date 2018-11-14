@@ -26,9 +26,10 @@ def main(data):
     print("Facebook Received: " + formatted_text)
     graph.put_object(parent_object='me',
                      connection_name='feed',
-                     message=formatted_text)
+                     message=formatted_text,
+                     link=data['deansURL'])
     print("Post to Facebook success")
 
 def format(data):
-    formatted_text = data
+    formatted_text = data['text']
     return formatted_text

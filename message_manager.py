@@ -30,6 +30,7 @@ JSON format:
     "facebookShare":{
         "shelterURL" : String, 
         "deansURL": String,
+        "text": String,
         "recent_resolved_crisis":[],
         "new_crisis":[],
         "active_crisis":[]
@@ -48,7 +49,7 @@ def post_social_message():
         print('Connecting to Twitter...')
         twitter_client.main(message['twitterShare'])
         print('Connecting to Facebook...')
-        facebook_client.main(message['twitterShare'])
+        facebook_client.main(message['facebookShare'])
         json_response = {"result" : "Success!", "posted" : message}
 
         return Response(json.dumps(json_response), status=201, mimetype='application/json')
